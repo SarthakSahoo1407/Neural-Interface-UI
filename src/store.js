@@ -11,7 +11,7 @@ import {
   isRunning,
   toggleAudio,
   createAudioNode,
-//   updateAudioNode,
+  //   updateAudioNode,
   removeAudioNode,
   connect,
   disconnect,
@@ -41,9 +41,13 @@ export const useStore = create((set, get) => ({
 
     switch (type) {
       case 'osc': {
-        const data = {} ;
-        // const position = { x: Math.floor(Math.random() * 100000), y: Math.floor(Math.random() * 1000) };
-        const position = { x: 0, y: 0 };
+        const data = {};
+        const position = {
+          x: Math.floor(Math.random() * 801), // Generates a random integer between 0 and 100 for x
+          y: Math.floor(Math.random() * 401)  // Generates a random integer between 0 and 100 for y
+        };
+
+
         createAudioNode(id, type, data);
         set({ nodes: [...get().nodes, { id, type, data, position }] });
 
@@ -51,9 +55,11 @@ export const useStore = create((set, get) => ({
       }
 
       case 'amp': {
-        const data = {  };
-        const position = { x: 0, y: 0 };
-
+        const data = {};
+                const position = {
+          x: Math.floor(Math.random() * 801), // Generates a random integer between 0 and 100 for x
+          y: Math.floor(Math.random() * 401)  // Generates a random integer between 0 and 100 for y
+        };
         createAudioNode(id, type, data);
         set({ nodes: [...get().nodes, { id, type, data, position }] });
 
@@ -100,7 +106,7 @@ export const useStore = create((set, get) => ({
   // },
 
 
-  
+
   // Function to update parameters for Amp nodes
   // updateAmpNode(id, gain1, gain2) {
   //   const updatedNodes = get().nodes.map((node) => {
@@ -135,26 +141,26 @@ export const useStore = create((set, get) => ({
   //     }
   //     return node;
   //   });
-  
+
   //   set({ nodes: updatedNodes });
   // },
-  
 
-updateOutNode() {
-  const { oscNodes, ampNodes } = get();
-  const outNodeData = { ...oscNodes, ...ampNodes };
-  const updatedNodes = get().nodes.map(node => {
-    if (node.id === 'output') {
-      return {
-        ...node,
-        data: outNodeData
-      };
-    }
-    return node;
-  });
-  set({ nodes: updatedNodes });
-}
-,
+
+  updateOutNode() {
+    const { oscNodes, ampNodes } = get();
+    const outNodeData = { ...oscNodes, ...ampNodes };
+    const updatedNodes = get().nodes.map(node => {
+      if (node.id === 'output') {
+        return {
+          ...node,
+          data: outNodeData
+        };
+      }
+      return node;
+    });
+    set({ nodes: updatedNodes });
+  }
+  ,
 
   onEdgesChange(changes) {
     set({
@@ -172,16 +178,16 @@ updateOutNode() {
   onNodesDelete(deleted) {
     const updatedNodes = get().nodes.filter(node => !deleted.some(({ id }) => id === node.id));
     set({ nodes: updatedNodes });
-  
+
     for (const { id } of deleted) {
       removeAudioNode(id);
     }
   },
-  
+
   onEdgesDelete(deleted) {
     const updatedEdges = get().edges.filter(edge => !deleted.some(({ id }) => id === edge.id));
     set({ edges: updatedEdges });
-  
+
     for (const { source, target } of deleted) {
       disconnect(source, target);
     }
@@ -218,7 +224,7 @@ updateOutNode() {
     console.log(jsonOutput);
     return jsonOutput;
   },
-  
 
-  
+
+
 }));

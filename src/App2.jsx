@@ -51,13 +51,14 @@ export default function App() {
   const store = useStore(selector, shallow);
   const [logData, setLogData] = useState({});
 
-  
+  const apiUrl = "http://10.130.1.152:8000";
+
 
   let jsonData = {};
-  const sendToApi = () => {
+  const sendToApi = async () => {
     console.log(jsonData);
     try {
-      const response = fetch("http://10.130.0.248:8000/api/generate", {
+      const response = fetch("http://10.130.1.152:8000/api/generate", {
         method: "POST",
         headers: {
           accept: "application/json",
@@ -66,7 +67,9 @@ export default function App() {
         body: jsonData,
       });
 
-      console.log(response);
+      // console.log(response.text);
+      const responseData = await response.text;
+      console.log("API Response:", responseData);
       console.log("Data sent to backend:", jsonData);
     } catch (error) {
       console.error("Error sending data to backend:", error);
@@ -103,10 +106,6 @@ export default function App() {
               // console.log("params.args is not an array:", params.args);
               // continue;
             }
-
-            // Since params.args is not an array, handle it differently
-            // Depending on the structure of params.args, you might need to access its properties differently
-            // You can use Object.entries or other methods to iterate over its properties
           }
         });
 

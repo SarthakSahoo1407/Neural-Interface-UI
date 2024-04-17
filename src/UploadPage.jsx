@@ -1,17 +1,21 @@
-// // UploadPage.jsx
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
-import './App.css';
-import './index.css';
 
-// require('dotenv').config();
+
+import "./App.css";
+import "./index.css";
+import Select from "react-select";
 
 function UploadPage() {
   const [file, setFile] = useState(null);
   const [headers, setHeaders] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
+
   const [selectedTargets, setSelectedTargets] = useState([]);
+  const apiUrl = "http://10.130.1.152:8000";
+  console.log("apiUrl", apiUrl);
 
   const handleFileChange = (event) => {
     const uploadedFile = event.target.files[0];
@@ -20,44 +24,30 @@ function UploadPage() {
     const reader = new FileReader();
     reader.onload = (event) => {
       const result = event.target.result;
-      const lines = result.split('\n');
+      const lines = result.split("\n");
       if (lines.length > 0) {
-        const headers = lines[0].split(',').map(header => header.trim());
+        const headers = lines[0].split(",").map((header) => header.trim());
         setHeaders(headers);
-        setSelectedFeatures([headers[0]]); // Set default selected features
-        setSelectedTargets([headers[0]]); // Set default selected targets
+        setSelectedFeatures([]); // No option selected initially
+        setSelectedTargets([]); // No option selected initially
       }
     };
     reader.readAsText(uploadedFile);
   };
 
-  const handleFeatureChange = (event) => {
-    const feature = event.target.value;
-    setSelectedFeatures(prevSelected => {
-      if (prevSelected.includes(feature)) {
-        return prevSelected.filter(item => item !== feature);
-      } else {
-        return [...prevSelected, feature];
-      }
-    });
+  const handleSelectAllFeatures = () => {
+    setSelectedFeatures(headers);
   };
 
-  const handleTargetChange = (event) => {
-    const target = event.target.value;
-    setSelectedTargets(prevSelected => {
-      if (prevSelected.includes(target)) {
-        return prevSelected.filter(item => item !== target);
-      } else {
-        return [...prevSelected, target];
-      }
-    });
+  const handleSelectAllTargets = () => {
+    setSelectedTargets(headers);
   };
 
   const handleGoToSecondPage = () => {
-    console.log()
+    console.log();
     const data = {
       selectedFeatures,
-      selectedTargets
+      selectedTargets,
     };
     console.log(JSON.stringify(data));
     if (!file) {
@@ -70,7 +60,7 @@ function UploadPage() {
     formData.append("targets", selectedTargets.join(","));
     formData.append("file", file);
 
-    fetch("http://10.130.0.248:8000/api/file", {
+    fetch("http://10.130.1.152:8000/api/file", {
       method: "POST",
       body: formData,
     })
@@ -88,64 +78,82 @@ function UploadPage() {
         console.error("There was a problem with the API request:", error);
       });
   };
+
   return (
     <div className="flex ">
-      <div className="flex  items-center justify-center h-screen">
+      <div className="flex  items-center  justify-center h-screen w-screen">
         <div className="text-center">
-          <h1 className="mb-8 text-4xl font-bold  text-gray-800">Upload Page</h1>
+          <h1 className="mb-8 text-4xl  font-bold  text-gray-800">
+            Upload Page
+          </h1>
           <input
             type="file"
             accept=".csv"
             onChange={handleFileChange}
-            className="mb-4 p-4 border border-gray-300 rounded"
+            className="block mb-4 w-full text-sm text-slate-500
+            file:mr-4 file:py-2 file:px-4 file:rounded-md
+            file:border-0 file:text-sm file:font-semibold
+            file:bg-blue-50 file:text-blue-500
+            hover:file:bg-pink-100"
           />
-          <div className="flex flex-row w-[30vw] justify-between ml-32 mb-4" >
+          <div className="flex flex-col w-[30vw] justify-between">
             <div className="mr-8 flex flex-col items-start">
-              <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">Features</h3>
-              {headers.map((header, index) => (
-                <div key={index} className="flex items-center mb-2">
-                  <input
-                    id={`feature-checkbox-${index}`}
-                    type="checkbox"
-                    value={header}
-                    checked={selectedFeatures.includes(header)}
-                    onChange={handleFeatureChange}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+              <div className="flex flex-row p-1 items-center">
+                <h3 className="mb-4 mr-4  mt-1 font-semibold  text-gray-900 dark:text-white">
+                  Features
+                </h3>
+                <div className="flex items-center w-[200vw]">
+                  <Select
+                    isMulti
+                    options={headers.map((header) => ({
+                      value: header,
+                      label: header,
+                    }))}
+                    value={selectedFeatures.map((feature) => ({
+                      value: feature,
+                      label: feature,
+                    }))}
+                    onChange={(selectedOptions) => {
+                      setSelectedFeatures(
+                        selectedOptions.map((option) => option.value)
+                      );
+                    }}
+                    className="w-[18vw]"
                   />
-                  <label
-                    htmlFor={`feature-checkbox-${index}`}
-                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  <button
+                    onClick={handleSelectAllFeatures}
+                    className="ml-2 px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600"
                   >
-                    {header}
-                  </label>
+                    Select All
+                  </button>
                 </div>
-              ))}
+              </div>
             </div>
-  
-            <div>
-              <h3 className="mb-4 flex flex-col items-start font-semibold text-gray-900 dark:text-white">Targets</h3>
-              {headers.map((header, index) => (
-                <div key={index} className="flex items-end mb-2 ">
-                  <input
-                    id={`target-checkbox-${index}`}
-                    type="checkbox"
-                    value={header}
-                    // checked={selectedTargets.includes(header)}
-                    onChange={handleTargetChange}
-                    disabled={selectedFeatures.includes(header)}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                  />
-                  <label
-                    htmlFor={`target-checkbox-${index}`}
-                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    {header}
-                  </label>
-                </div>
-              ))}
+
+            <div className="flex flex-row">
+              <h3 className="mb-4  mr-8 mt-1 flex flex-col items-start font-semibold text-gray-900 dark:text-white">
+                Targets
+              </h3>
+              <Select
+                isMulti
+                options={headers.map((header) => ({
+                  value: header,
+                  label: header,
+                }))}
+                value={selectedTargets.map((target) => ({
+                  value: target,
+                  label: target,
+                }))}
+                onChange={(selectedOptions) => {
+                  setSelectedTargets(
+                    selectedOptions.map((option) => option.value)
+                  );
+                }}
+                className="w-[18vw]"
+              />
             </div>
           </div>
-  
+
           <Link to="/app" className="text-white">
             <button
               className="px-6 py-3 text-lg font-semibold self-center ml-6 text-white bg-blue-500 rounded hover:bg-blue-600"
@@ -160,3 +168,5 @@ function UploadPage() {
   );
 }
 export default UploadPage;
+  
+
