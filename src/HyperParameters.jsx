@@ -293,7 +293,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { vs } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { CircularProgressbar } from "react-circular-progressbar";
 import ChangingProgressProvider from "./ChangingProgressProvider";
 
@@ -333,7 +333,7 @@ const MyPage = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://10.130.1.152:8000/api/getCode", {
+      const response = await fetch("http://192.168.51.208:8000/api/getCode", {
         headers: {
           accept: "application/json",
         },
@@ -352,7 +352,7 @@ const MyPage = () => {
   const handleGoToSecondPage = async () => {
     try {
       const response = await fetch(
-        `http://10.130.1.152:8000/api/hyperparameters?optimizer=${encodeURIComponent(
+        `http://192.168.51.208:8000/api/hyperparameters?optimizer=${encodeURIComponent(
           optimizer
         )}&loss=${encodeURIComponent(
           lossFunction
@@ -380,7 +380,7 @@ const MyPage = () => {
   };
   const [ws, setWs] = useState(null);
   const establishWebSocketConnection = () => {
-    const socket = new WebSocket("ws://10.130.1.152:8000/ws");
+    const socket = new WebSocket("ws://192.168.51.208:8000/ws");
 
     socket.onopen = () => {
       console.log("WebSocket connected");
@@ -392,8 +392,8 @@ const MyPage = () => {
       setCurrentEpoch(parsedData.currentEpoch);
       setStepsPerEpoch(parsedData.stepsPerEpoch);
       setCurrentStep(parsedData.currentStep);
-      setPercent(parsedData.percent);
-      setTrainLoss(parsedData.trainLoss);
+      setPercent(Math.round(parsedData.percent));
+      setTrainLoss(Math.round(parsedData.trainLoss));
 
       setWebMessage(event.data);
     };
@@ -521,18 +521,19 @@ const MyPage = () => {
           <div className="px-4 py-2">
             <SyntaxHighlighter
               language="json"
-              style={atomOneDark}
+              style={vs}
               className="text-left"
               customStyle={{
-                padding: "20px",
+
               }}
+              wrapLines={true}
               wrapLongLines={true}
             >
-              {webMessageStr}
+              {webMessage}
             </SyntaxHighlighter>
           </div>
         </div>
-        <div className="mt-8 max-w-[35%]">
+        <div className=" max-w-[35%]">
           <div style={{ width: 100, height: 100 }}>
             <CircularProgressbar
               value={Math.round(percent)}
@@ -547,7 +548,7 @@ const MyPage = () => {
           <div className="px-4 py-2">
             <SyntaxHighlighter
               language="python"
-              style={atomOneDark}
+              style={vs}
               className="text-left"
               customStyle={{
                 padding: "20px",

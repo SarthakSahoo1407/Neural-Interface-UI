@@ -51,14 +51,14 @@ export default function App() {
   const store = useStore(selector, shallow);
   const [logData, setLogData] = useState({});
 
-  const apiUrl = "http://10.130.1.152:8000";
+  // const apiUrl = "http://10.130.1.152:8000";
 
 
   let jsonData = {};
   const sendToApi = async () => {
     console.log(jsonData);
     try {
-      const response = fetch("http://10.130.1.152:8000/api/generate", {
+      const response = fetch("http://192.168.51.208:8000/api/generate", {
         method: "POST",
         headers: {
           accept: "application/json",
