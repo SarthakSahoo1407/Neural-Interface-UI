@@ -1,5 +1,15 @@
 # Neural Map
 
+- People working in artificial intelligence often face problems when coding complex neural networks. Many of them either lack the resources or time to learn and practice the syntax and rules of programming languages. A No-Code User-friendly interface is developed to create, train, and analyze the user’s neural network to address this issue
+
+## Salient Features:
+
+- Developing neural network with a no-code environment
+- Drag and drop facility to provide the easiest way to design your network.
+- By defining hyperparameters, the network can be trained.
+- Tensorflow integration for better visualization and easier analysis.
+- The availability of many customizable layers empowers users to construct complex networks with multiple input and output vectors.
+
 
 # React + Vite
 
