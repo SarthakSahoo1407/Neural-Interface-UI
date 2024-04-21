@@ -1,6 +1,6 @@
 # Neural Map
 
-- People working in artificial intelligence often face problems when coding complex neural networks. Many of them either lack the resources or time to learn and practice the syntax and rules of programming languages. A No-Code User-friendly interface is developed to create, train, and analyze the user’s neural network to address this issue
+ People working in artificial intelligence often face problems when coding complex neural networks. Many of them either lack the resources or time to learn and practice the syntax and rules of programming languages. A No-Code User-friendly interface is developed to create, train, and analyze the user’s neural network to address this issue
 
 ## Salient Features:
 
