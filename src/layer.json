@@ -3,7 +3,7 @@
     "Type": "Activation",
     "params": {
       "args": {
-        "activation": "",
+        "activation": "linear",
         "**kwargs": ""
       },
       "kwargs": {
@@ -70,12 +70,14 @@
   {
     "Type": "Add",
     "params": {
-      "args": {},
+      "args": {
+      },
       "kwargs": {
         "Name": "Add"
       }
     },
-    "param_desc": {},
+    "param_desc": {
+    },
     "description": "Performs element-wise addition operation.",
     "href": "https://www.tensorflow.org/api_docs/python/tf/keras/layers/Add"
   },
@@ -3169,56 +3171,7 @@
     "description": "Zero-padding layer for 2D input (e.g. picture).",
     "href": "https://www.tensorflow.org/api_docs/python/tf/keras/layers/ZeroPadding2D"
   },
-  {
-    "Type": "ZeroPadding1D",
-    "params": {
-      "args": {
-        "**kwargs": ""
-      },
-      "kwargs": {
-        "padding": "1",
-        "Name": "ZeroPadding1D"
-      }
-    },
-    "param_desc": {
-      "padding": {
-        "type": "int",
-        "min": 1,
-        "max": null,
-        "description": "The size of the padding."
-      }
-    },
-    "description": "Zero-padding layer for 1D input (e.g. temporal sequence).",
-    "href": "https://www.tensorflow.org/api_docs/python/tf/keras/layers/ZeroPadding1D"
-  },
-  {
-    "Type": "ZeroPadding2D",
-    "params": {
-      "args": {
-        "**kwargs": ""
-      },
-      "kwargs": {
-        "padding": "1,1",
-        "data_format": "channels_last",
-        "Name": "ZeroPadding2D"
-      }
-    },
-    "param_desc": {
-      "padding": {
-        "type": "list",
-        "min_size": 1,
-        "max_size": 2,
-        "description": "The padding size."
-      },
-      "data_format": {
-        "type": "dropdown",
-        "options": ["channels_last", "channels_first"],
-        "description": "The ordering of the dimensions in the inputs. channels_last corresponds to inputs with shape (batch, height, width, channels) while channels_first corresponds to inputs with shape (batch, channels, height, width)."
-      }
-    },
-    "description": "Zero-padding layer for 2D input (e.g. picture).",
-    "href": "https://www.tensorflow.org/api_docs/python/tf/keras/layers/ZeroPadding2D"
-  },
+  
   {
     "Type": "ZeroPadding3D",
     "params": {

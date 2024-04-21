@@ -1,301 +1,11 @@
-// import React, { useState, useEffect } from "react";
-// import "./App.css";
-// import SyntaxHighlighter from "react-syntax-highlighter";
-// import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
-// import { CircularProgressbar } from "react-circular-progressbar";
-// import ChangingProgressProvider from "./ChangingProgressProvider";
-
-// import "react-circular-progressbar/dist/styles.css";
-
-// // import IP from "./IP";
-
-// const MyPage = () => {
-//   const [optimizer, setOptimizer] = useState("Adam");
-//   const [lossFunction, setLossFunction] = useState("BinaryCrossentropy");
-//   const [learningRate, setLearningRate] = useState(0.01);
-//   const [batchSize, setBatchSize] = useState(1);
-//   const [epochs, setEpochs] = useState(1);
-//   const [validation_split, setvalidation_Split] = useState(0);
-//   const [codeString, setCodeString] = useState("");
-//   const [webMessage, setWebMessage] = useState("");
-//   const [totalEpoch, setTotalEpoch] = useState("");
-//   const [currentEpoch, setCurrentEpoch] = useState("");
-//   const [stepsPerEpoch, setStepsPerEpoch] = useState("");
-//   const [currentStep, setCurrentStep] = useState("");
-//   const [percent, setPercent] = useState(0);
-//   const [trainLoss, setTrainLoss] = useState("");
-
-//   // console.log(typeof(websocketData.totalEpoch))
-//   const webMessageStr = `  totalEpoch: ${totalEpoch},
-//   currentEpoch: ${currentEpoch},
-//   stepsPerEpoch: ${stepsPerEpoch},
-//   currentStep: ${currentStep},
-//   percent: ${Math.round(percent * 100) / 100} %,
-//   trainLoss: ${Math.round(trainLoss * 100) / 100}`;
-
-//   const lossFunc = {
-//     "Binary Crossentropy": "BinaryCrossentropy",
-//     "Sparse Categorical Crossentropy": "SparseCategoricalCrossentropy",
-//     "Categorical Crossentropy": "CategoricalCrossentropy",
-//     Huber: "Huber",
-//     "Mean Absolute Error": "MeanAbsoluteError",
-//     "Mean Sqaured Error": "MeanSquaredError",
-//   };
-
-//   const fetchData = async () => {
-//     try {
-//       const response = await fetch("http://10.130.1.152:8000/api/getCode", {
-//         headers: {
-//           accept: "application/json",
-//         },
-//       });
-//       const data = await response.json();
-//       setCodeString(data);
-//       // console.log('data',data);
-//     } catch (error) {
-//       console.error("Error fetching code string:", error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-
-// const opt = {
-//   Adam: "Adam",
-//   SGD: "SGD",
-//   Adagrad: "Adagrad",
-//   Adadelta: "Adadelta",
-//   RMSprop: "RMSprop",
-// };
-//   // ip_add = IP;
-
-//   const handleGoToSecondPage = async () => {
-//     console.log(
-//       optimizer,
-//       lossFunction,
-//       learningRate,
-//       batchSize,
-//       epochs,
-//       validation_split
-//     );
-//     await fetch(
-//       `http://10.130.1.152:8000/api/hyperparameters?optimizer=${encodeURIComponent(
-//         optimizer
-//       )}&loss=${encodeURIComponent(
-//         lossFunction
-//       )}&learning_rate=${encodeURIComponent(
-//         learningRate
-//       )}&epochs=${encodeURIComponent(epochs)}&batch_size=${encodeURIComponent(
-//         batchSize
-//       )}&validation_split=${encodeURIComponent(validation_split)}`,
-//       {
-//         method: "POST",
-//         headers: {
-//           accept: "application/json",
-//           "content-type": "application/x-www-form-urlencoded",
-//         },
-//         body: "",
-//       }
-//     );
-//     await establishWebSocketConnection();
-//   };
-
-//   // Function to establish WebSocket connection
-//   const establishWebSocketConnection = () => {
-//     const socket = new WebSocket("ws://10.130.1.152:8000/ws");
-
-//     socket.onopen = () => {
-//       console.log("WebSocket connected");
-//     };
-
-//     socket.onmessage = (event) => {
-//       // console.log("WebSocket message received:", event.data);
-//       const parsedData = JSON.parse(event.data);
-//       setTotalEpoch(parsedData.totalEpoch);
-//       setCurrentEpoch(parsedData.currentEpoch);
-//       setStepsPerEpoch(parsedData.stepsPerEpoch);
-//       setCurrentStep(parsedData.currentStep);
-//       setPercent(parsedData.percent);
-//       setTrainLoss(parsedData.trainLoss);
-
-//       setWebMessage(event.data);
-//     };
-
-//     socket.onclose = () => {
-//       console.log("WebSocket disconnected");
-//     };
-
-//     setWs(socket);
-//   };
-
-//   const handleOptimizerChange = (e) => {
-//     setOptimizer(e.target.value);
-//   };
-
-//   const handleLossFunctionChange = (e) => {
-//     setLossFunction(e.target.value);
-//   };
-
-//   const handleLearningRateChange = (e) => {
-//     setLearningRate(parseFloat(e.target.value));
-//   };
-
-//   const handleBatchSizeChange = (e) => {
-//     setBatchSize(parseInt(e.target.value));
-//   };
-
-//   const handleEpochsChange = (e) => {
-//     setEpochs(parseInt(e.target.value));
-//   };
-//   const handlevalidation_SplitChange = (e) => {
-//     setvalidation_Split(parseFloat(e.target.value));
-//   };
-
-//   // const [progress, setProgress] = useState(0);
-//   const [ws, setWs] = useState(null);
-
-//   return (
-//     <div className="container mx-auto p-4">
-//       <h1 className="text-3xl font-bold mb-4">Input Page</h1>
-
-//       <div className="mb-4">
-//         <label className="block text-sm font-bold mb-1">Optimizers:</label>
-//         <select
-//           className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-//           value={optimizer}
-//           onChange={handleOptimizerChange}
-//         >
-//           {Object.keys(opt).map((key) => (
-//             <option key={key} value={opt[key]}>
-//               {key}
-//             </option>
-//           ))}
-//         </select>
-//       </div>
-
-//       <div className="mb-4">
-//         <label className="block text-sm font-bold mb-1">Loss Function:</label>
-//         <select
-//           className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-//           value={lossFunction}
-//           onChange={handleLossFunctionChange}
-//         >
-//           {Object.keys(lossFunc).map((key) => (
-//             <option key={key} value={lossFunc[key]}>
-//               {key}
-//             </option>
-//           ))}
-//         </select>
-//       </div>
-
-//       <div className="mb-4">
-//         <label className="block text-sm font-bold mb-1">Learning Rate:</label>
-//         <input
-//           type="number"
-//           value={learningRate}
-//           onChange={handleLearningRateChange}
-//           className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-//         />
-//       </div>
-//       <div className="mb-4">
-//         <label className="block text-sm font-bold mb-1">
-//           validation_Split:
-//         </label>
-//         <input
-//           type="number"
-//           value={validation_split}
-//           onChange={handlevalidation_SplitChange}
-//           className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-//         />
-//       </div>
-
-//       <div className="mb-4">
-//         <label className="block text-sm font-bold mb-1">Batch Size:</label>
-//         <input
-//           type="number"
-//           value={batchSize}
-//           onChange={handleBatchSizeChange}
-//           className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-//         />
-//       </div>
-
-//       <div className="mb-4">
-//         <label className="block text-sm font-bold mb-1">Epochs:</label>
-//         <input
-//           type="number"
-//           value={epochs}
-//           onChange={handleEpochsChange}
-//           className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-//         />
-//       </div>
-
-//       <button
-//         className="px-6 py-3 text-lg font-semibold text-white bg-blue-500 rounded hover:bg-blue-600"
-//         onClick={handleGoToSecondPage}
-//       >
-//         Neural Page
-//       </button>
-
-//       <div className="grid place-items-center mt-8">
-//         <div className="max-w-full min-w-[25rem]  rounded-md overflow-hidden">
-//           <div className="px-4 py-2">
-//             <SyntaxHighlighter
-//               language="json"
-//               style={atomOneDark}
-//               className="text-left"
-//               customStyle={{
-//                 padding: "20px",
-//               }}
-//               wrapLongLines={true}
-//             >
-//               {/* {console.log("codeString:", codeString)} */}
-//               {webMessageStr}
-//             </SyntaxHighlighter>
-//           </div>
-//         </div>
-//         <div className="mt-8">
-//           {/* <h2 className="text-xl font-bold mb-2">WebSocket Data</h2> */}
-//           <div style={{ width: 50, height: 50 }}>
-//             <CircularProgressbar
-//               value={Math.round(percent)}
-//               text={`${Math.round(percent)}%`}
-//             />
-//           </div>
-//           {/* <p>Percent: {websocketData.percent}</p> */}
-//         </div>
-//       </div>
-
-//       <div className="grid place-items-center mt-8">
-//         <div className="max-w-full min-w-[25rem]  rounded-md overflow-hidden">
-//           <div className="px-4 py-2">
-//             <SyntaxHighlighter
-//               language="python"
-//               style={atomOneDark}
-//               className="text-left"
-//               customStyle={{
-//                 padding: "20px",
-//               }}
-//               wrapLongLines={true}
-//             >
-//               {/* {console.log("codeString:", codeString)} */}
-//               {codeString}
-//             </SyntaxHighlighter>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default MyPage;
-
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { vs } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { CircularProgressbar } from "react-circular-progressbar";
 import ChangingProgressProvider from "./ChangingProgressProvider";
+import ProgressGrid from "./ProgressCard";
+
 
 import "react-circular-progressbar/dist/styles.css";
 
@@ -307,19 +17,51 @@ const MyPage = () => {
   const [epochs, setEpochs] = useState(1);
   const [validation_split, setvalidation_Split] = useState(0);
   const [codeString, setCodeString] = useState("");
-  const [webMessage, setWebMessage] = useState("");
-  const [totalEpoch, setTotalEpoch] = useState("");
-  const [currentEpoch, setCurrentEpoch] = useState("");
-  const [stepsPerEpoch, setStepsPerEpoch] = useState("");
-  const [currentStep, setCurrentStep] = useState("");
-  const [percent, setPercent] = useState(0);
-  const [trainLoss, setTrainLoss] = useState("");
+  var [webMessage, setWebMessage] = useState("");
+  const [totalEpoch, setTotalEpoch] = useState(5);
+  const [currentEpoch, setCurrentEpoch] = useState(1);
+  const [stepsPerEpoch, setStepsPerEpoch] = useState(2218);
+  const [currentStep, setCurrentStep] = useState(1024);
+  const [percent, setPercent] = useState(91.5);
+  const [trainLoss, setTrainLoss] = useState(89.36);
 
+  webMessage = `  totalEpoch: ${parseInt(totalEpoch)},
+  currentEpoch: ${parseInt(currentEpoch)},
+  stepsPerEpoch: ${parseInt(stepsPerEpoch)},
+  currentStep: ${parseInt(currentStep)},
+  percent: ${Math.round(percent * 100) / 100} %,
+  trainLoss: ${Math.round(trainLoss * 100) / 100}`;
+
+
+  const progressData = [
+    {
+      title: "Current Epoch",
+      value: Math.round((currentEpoch / totalEpoch) * 100),
+      text: `${Math.round(currentEpoch)}`,
+    },
+    {
+      title: "Current Step",
+      value: Math.round((currentStep / stepsPerEpoch) * 100),
+      text: `${Math.round(currentStep)}`,
+    },
+    {
+      title: "Percent",
+      value: Math.round(percent),
+      text: `${Math.round(percent)}%`,
+    },
+    {
+      title: "Train Loss",
+      value: Math.round(trainLoss * 100) / 100,
+      text: `${Math.round(trainLoss * 100) / 100}`,
+    },
+  ];
+
+  // console.log(typeof(currentEpoch))
   const lossFunc = {
     "Binary Crossentropy": "BinaryCrossentropy",
     "Sparse Categorical Crossentropy": "SparseCategoricalCrossentropy",
     "Categorical Crossentropy": "CategoricalCrossentropy",
-    "Huber": "Huber",
+    Huber: "Huber",
     "Mean Absolute Error": "MeanAbsoluteError",
     "Mean Sqaured Error": "MeanSquaredError",
   };
@@ -333,7 +75,7 @@ const MyPage = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://192.168.51.208:8000/api/getCode", {
+      const response = await fetch("http://10.130.1.3:8000/api/getCode", {
         headers: {
           accept: "application/json",
         },
@@ -352,7 +94,7 @@ const MyPage = () => {
   const handleGoToSecondPage = async () => {
     try {
       const response = await fetch(
-        `http://192.168.51.208:8000/api/hyperparameters?optimizer=${encodeURIComponent(
+        `http://10.130.1.3:8000/api/hyperparameters?optimizer=${encodeURIComponent(
           optimizer
         )}&loss=${encodeURIComponent(
           lossFunction
@@ -380,7 +122,7 @@ const MyPage = () => {
   };
   const [ws, setWs] = useState(null);
   const establishWebSocketConnection = () => {
-    const socket = new WebSocket("ws://192.168.51.208:8000/ws");
+    const socket = new WebSocket("ws://10.130.1.3:8000/ws");
 
     socket.onopen = () => {
       console.log("WebSocket connected");
@@ -388,12 +130,13 @@ const MyPage = () => {
 
     socket.onmessage = (event) => {
       const parsedData = JSON.parse(event.data);
-      setTotalEpoch(parsedData.totalEpoch);
-      setCurrentEpoch(parsedData.currentEpoch);
-      setStepsPerEpoch(parsedData.stepsPerEpoch);
-      setCurrentStep(parsedData.currentStep);
-      setPercent(Math.round(parsedData.percent));
-      setTrainLoss(Math.round(parsedData.trainLoss));
+      // console.log(parsedData)
+      setTotalEpoch(parsedData.total_Epoch);
+      setCurrentEpoch(parsedData.current_epoch);
+      setStepsPerEpoch(parsedData.step_per_epoch);
+      setCurrentStep(parsedData.current_step);
+      setPercent(parsedData.percent);
+      setTrainLoss(parsedData.train_loss);
 
       setWebMessage(event.data);
     };
@@ -436,132 +179,198 @@ const MyPage = () => {
   trainLoss: ${Math.round(trainLoss * 100) / 100}`;
 
   return (
-    <div className="container mx-auto p-4 flex flex-col w-full">
-      <h1 className="text-3xl font-bold mb-4">Input Page</h1>
-      <div className="w-[40vw] flex flex-col self-center">
-        <div className="mb-4 flex flex-col items-start">
-          <label className="block text-sm font-bold mb-1 gap-2">Optimizers:</label>
-          <select
-            className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-            value={optimizer}
-            onChange={handleOptimizerChange}
-          >
-            {Object.keys(opt).map((key) => (
-              <option key={key} value={opt[key]}>
-                {key}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="mb-4 flex flex-col items-start gap-2">
-          <label className="block text-sm font-bold mb-1">Loss Function:</label>
-          <select
-            className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-            value={lossFunction}
-            onChange={handleLossFunctionChange}
-          >
-            {Object.keys(lossFunc).map((key) => (
-              <option key={key} value={lossFunc[key]}>
-                {key}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="mb-4 flex flex-col items-start gap-2">
-          <label className="block text-sm font-bold mb-1">Learning Rate:</label>
-          <input
-            type="number"
-            value={learningRate}
-            onChange={handleLearningRateChange}
-            className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div className="mb-4 flex flex-col items-start gap-2">
-          <label className="block text-sm font-bold mb-1">
-            validation_Split:
-          </label>
-          <input
-            type="number"
-            value={validation_split}
-            onChange={handlevalidation_SplitChange}
-            className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-
-        <div className="mb-4 flex flex-col items-start gap-2">
-          <label className="block text-sm font-bold mb-1">Batch Size:</label>
-          <input
-            type="number"
-            value={batchSize}
-            onChange={handleBatchSizeChange}
-            className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-
-        <div className="mb-4 flex flex-col items-start gap-2">
-          <label className="block text-sm font-bold mb-1">Epochs:</label>
-          <input
-            type="number"
-            value={epochs}
-            onChange={handleEpochsChange}
-            className="w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-      </div>
-      <button
-        className="w-[200px] px-6 py-3 flex self-center justify-center text-lg font-semibold text-white bg-blue-500 rounded hover:bg-blue-600"
-        onClick={handleGoToSecondPage}
-      >
-        Neural Page
-      </button>
-      <div className="flex flex-row justify-center gap-32 place-items-center mt-8">
-        <div className="max-w-full min-w-[25rem]  rounded-md overflow-hidden">
-          <div className="px-4 py-2">
-            <SyntaxHighlighter
-              language="json"
-              style={vs}
-              className="text-left"
-              customStyle={{
-
-              }}
-              wrapLines={true}
-              wrapLongLines={true}
-            >
-              {webMessage}
-            </SyntaxHighlighter>
+    <div className="bg-[#f9f9f9]  w-screen px-[20%] py-[3vw]">
+      {/*input fields */}
+      <h1 className="font-bold text-[1.7vw] capitalize text-[#414141] p-4">
+        Parameters
+      </h1>
+      <div className="inputs mb-5 rounded-2xl bg-white p-6 shadow-xl w-full flex gap-[3vw] flex-col">
+        
+        <div className="fields flex flex-row">
+          <div className="part1 w-1/2 flex flex-col gap-[3vw] px-5">
+            <div className="flex flex-col gap-2">
+              {/* drop down */}
+              <label className="text-[#5f5f5f] font-semibold text-[1.1vw]">
+                Optimizers:
+              </label>
+              <select
+                className="bg-white w-full focus:outline-none text-[#5f5f5f] border-b-2 border-gray shadow-2xl font-normal"
+                value={optimizer}
+                onChange={handleOptimizerChange}
+              >
+                {Object.keys(opt).map((key) => (
+                  <option key={key} value={opt[key]}>
+                    {key}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col gap-2">
+              {/* input field */}
+              <label className="text-[#5f5f5f] font-semibold text-[1.1vw]">
+                Learning Rate:
+              </label>
+              <input
+                className="bg-white w-full focus:outline-none text-[#5f5f5f] border-b-2 border-gray shadow-2xl font-normal"
+                type="number"
+                value={learningRate}
+                onChange={handleLearningRateChange}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              {/* input field */}
+              <label className="text-[#5f5f5f] font-semibold text-[1.1vw]">
+                Batch Size:
+              </label>
+              <input
+                className="bg-white w-full focus:outline-none text-[#5f5f5f] border-b-2 border-gray shadow-2xl font-normal"
+                type="number"
+                value={batchSize}
+                onChange={handleBatchSizeChange}
+              />
+            </div>
+          </div>
+          <div className="part2 w-1/2 flex flex-col gap-[3vw] px-5">
+            <div className="flex flex-col gap-2">
+              {/* dropdown */}
+              <label className="text-[#5f5f5f] font-semibold text-[1.1vw]">
+                Loss Function:
+              </label>
+              <select
+                className="bg-white w-full focus:outline-none text-[#5f5f5f] border-b-2 border-gray shadow-2xl font-normal"
+                value={lossFunction}
+                onChange={handleLossFunctionChange}
+              >
+                {Object.keys(lossFunc).map((key) => (
+                  <option key={key} value={lossFunc[key]}>
+                    {key}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col gap-2">
+              {/* input field */}
+              <label className="text-[#5f5f5f] font-semibold text-[1.1vw]">
+                validation_Split:
+              </label>
+              <input
+                className="bg-white w-full focus:outline-none text-[#5f5f5f] border-b-2 border-gray shadow-2xl font-normal"
+                type="number"
+                value={validation_split}
+                onChange={handlevalidation_SplitChange}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              {/* input field */}
+              <label className="text-[#5f5f5f] font-semibold text-[1.1vw]">
+                Epochs:
+              </label>
+              <input
+                className="bg-white w-full focus:outline-none text-[#5f5f5f] border-b-2 border-gray shadow-2xl font-normal"
+                type="number"
+                value={epochs}
+                onChange={handleEpochsChange}
+              />
+            </div>
           </div>
         </div>
-        <div className=" max-w-[35%]">
-          <div style={{ width: 100, height: 100 }}>
-            <CircularProgressbar
-              value={Math.round(percent)}
-              text={`${Math.round(percent)}%`}
-            />
-          </div>
-        </div>
+        <button
+          className="px-4 py-2 w-1/4 text-[1.2vw] self-center font-semibold text-white bg-[#16a34a] rounded-lg hover:bg-[#41a967]"
+          onClick={handleGoToSecondPage}
+        >
+          Submit
+        </button>
       </div>
 
-      <div className="grid place-items-center mt-8">
-        <div className="max-w-full min-w-[25rem]  rounded-md overflow-hidden">
-          <div className="px-4 py-2">
-            <SyntaxHighlighter
-              language="python"
-              style={vs}
-              className="text-left"
-              customStyle={{
-                padding: "20px",
-              }}
-              wrapLongLines={true}
-            >
-              {codeString}
-            </SyntaxHighlighter>
-          </div>
-        </div>
+      <h1 className="font-bold text-[1.7vw] capitalize text-[#5f5f5f] p-4">
+        Progress
+      </h1>
+      <ProgressGrid progressData={progressData} />;
+
+      
+      <h1 className="font-bold text-[1.7vw] capitalize text-[#5f5f5f] p-4 ">
+        Gen-Code
+      </h1>
+      <div className="shadow-xl rounded-2xl bg-white py-2 px-1 ">
+        {/* code gen part */}
+        <SyntaxHighlighter
+          language="python"
+          style={vs}
+          customStyle={{
+            padding: "20px",
+          }}
+          wrapLongLines={true}
+        >
+          {codeString}
+        </SyntaxHighlighter>
       </div>
     </div>
   );
 };
 
 export default MyPage;
+
+
+
+
+
+{/* <div className="grid grid-cols-1 xl:grid-cols-4 md:grid-cols-2 gap-6 w-full mb-5 ">
+        {/* 6 card div */}
+        {/* <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+          <h1 className="text-black font-bold text-xl">Total Epochs</h1>
+          <CircularProgressbar
+              className="w-4/6 h-4/6"
+              value={Math.round((totalEpoch / 100) * 100  )}
+              text={`${Math.round(totalEpoch)}%`
+            }
+            />
+        </div> */}
+        
+        // <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+        //   <h1 className="text-black font-bold text-xl">Current Epoch</h1>
+        //   <CircularProgressbar
+        //       className="w-4/6 h-4/6"
+        //       value={Math.round((currentEpoch / totalEpoch)* 100)}
+        //       text={`${Math.round(currentEpoch)}`
+        //     }
+        //     />
+        // </div>
+        {/* <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+          <h1 className="text-black font-bold text-xl">Steps Per Epochs</h1>
+          <CircularProgressbar
+              className="w-4/6 h-4/6"
+              value={Math.round(percent)}
+              text={`${Math.round(stepsPerEpoch)}%`
+            }
+            />
+        </div> */}
+        // <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+        //   <h1 className="text-black font-bold text-xl">Current Step</h1>
+        //   <CircularProgressbar
+        //       className="w-4/6 h-4/6"
+        //       value={Math.round((currentStep / stepsPerEpoch) * 100)}
+        //       text={`${Math.round(currentStep)}`
+        //     }
+        //     />
+        // </div>
+        // <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+        //   <h1 className="text-black font-bold text-xl">Percent</h1>
+        //   <CircularProgressbar
+        //       className="w-4/6 h-4/6"
+        //       value={Math.round(percent)}
+        //       text={`${Math.round(percent)}%`
+        //     }
+        //     />
+        // </div>
+        // <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+        //   <h1 className="text-black font-bold text-xl">Train loss</h1>
+        //   <CircularProgressbar
+        //       className="w-4/6 h-4/6"
+        //       value={Math.round(trainLoss * 100) / 100}
+              
+        //       text={`${Math.round(trainLoss * 100) / 100}`
+              
+        //     }
+        //     />
+        // </div>
+      // </div> */}

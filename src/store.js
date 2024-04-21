@@ -43,8 +43,8 @@ export const useStore = create((set, get) => ({
       case 'osc': {
         const data = {};
         const position = {
-          x: Math.floor(Math.random() * 801), // Generates a random integer between 0 and 100 for x
-          y: Math.floor(Math.random() * 401)  // Generates a random integer between 0 and 100 for y
+          x: Math.floor(0), // Generates a random integer between 0 and 100 for x
+          y: Math.floor(0)  // Generates a random integer between 0 and 100 for y
         };
 
 
@@ -56,9 +56,9 @@ export const useStore = create((set, get) => ({
 
       case 'amp': {
         const data = {};
-                const position = {
-          x: Math.floor(Math.random() * 801), // Generates a random integer between 0 and 100 for x
-          y: Math.floor(Math.random() * 401)  // Generates a random integer between 0 and 100 for y
+        const position = {
+          x: Math.floor(0), // Generates a random integer between 0 and 100 for x
+          y: Math.floor(0)  // Generates a random integer between 0 and 100 for y
         };
         createAudioNode(id, type, data);
         set({ nodes: [...get().nodes, { id, type, data, position }] });
@@ -68,14 +68,15 @@ export const useStore = create((set, get) => ({
     }
   },
 
-  updateNode(id, newData) {
+  updateNode(id, newData, name) {
     const updatedNodes = get().nodes.map((node) => {
       if (node.id === id) {
         return {
           ...node,
           data: {
             ...node.data,
-            ...newData
+            ...newData,
+            ...name
           }
         };
       }
@@ -83,6 +84,17 @@ export const useStore = create((set, get) => ({
     });
 
     set({ nodes: updatedNodes });
+  },
+  oscLayerType: null,
+  ampLayerType: null,
+
+
+  updateOscLayerType(type) {
+    set({ oscLayerType: type });
+  },
+
+  updateAmpLayerType(type) {
+    set({ ampLayerType: type });
   },
 
   // Function to update parameters for Osc nodes
@@ -104,7 +116,23 @@ export const useStore = create((set, get) => ({
 
   //   set({ nodes: updatedNodes });
   // },
+  setParameters(id, newData, name) {
+    const updatedNodes = get().nodes.map((node) => {
+      if (node.id === id) {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            ...newData,
+            ...name
+          }
+        };
+      }
+      return node;
+    });
 
+    set({ nodes: updatedNodes });
+  },
 
 
   // Function to update parameters for Amp nodes

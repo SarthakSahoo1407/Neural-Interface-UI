@@ -38,25 +38,17 @@ import MyPage from "./HyperParameters";
 
 function App() {
   return (
-    <Router>
+    <Router  >
       <Routes>
         {" "}
-        {/* Wrap Routes around Route components */}
         <Route path="/" element={<UploadPage />} />{" "}
         <Route path="/hyperparameter" element={<MyPage />} />{" "}
-        {/* Use 'element' prop instead of direct component */}
         <Route
           path="/app"
           element={
-            <React.StrictMode>
-              {" "}
-              {/* Use 'element' prop instead of direct component */}
-              <div style={{ width: "100vw", height: "100vh" }}>
-                <ReactFlowProvider>
+              <div className="h-screen w-screen">
                   <SecondPage />
-                </ReactFlowProvider>
               </div>
-            </React.StrictMode>
           }
         />
       </Routes>
