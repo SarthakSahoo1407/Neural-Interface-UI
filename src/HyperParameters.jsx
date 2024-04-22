@@ -6,10 +6,11 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import ChangingProgressProvider from "./ChangingProgressProvider";
 import ProgressGrid from "./ProgressCard";
 
-
 import "react-circular-progressbar/dist/styles.css";
 
 const MyPage = () => {
+  const ip = "10.130.0.142:8000";
+
   const [optimizer, setOptimizer] = useState("Adam");
   const [lossFunction, setLossFunction] = useState("BinaryCrossentropy");
   const [learningRate, setLearningRate] = useState(0.01);
@@ -18,12 +19,12 @@ const MyPage = () => {
   const [validation_split, setvalidation_Split] = useState(0);
   const [codeString, setCodeString] = useState("");
   var [webMessage, setWebMessage] = useState("");
-  const [totalEpoch, setTotalEpoch] = useState(5);
-  const [currentEpoch, setCurrentEpoch] = useState(1);
-  const [stepsPerEpoch, setStepsPerEpoch] = useState(2218);
-  const [currentStep, setCurrentStep] = useState(1024);
-  const [percent, setPercent] = useState(91.5);
-  const [trainLoss, setTrainLoss] = useState(89.36);
+  const [totalEpoch, setTotalEpoch] = useState(0);
+  const [currentEpoch, setCurrentEpoch] = useState(0);
+  const [stepsPerEpoch, setStepsPerEpoch] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [percent, setPercent] = useState(0);
+  const [trainLoss, setTrainLoss] = useState(0);
 
   webMessage = `  totalEpoch: ${parseInt(totalEpoch)},
   currentEpoch: ${parseInt(currentEpoch)},
@@ -31,7 +32,6 @@ const MyPage = () => {
   currentStep: ${parseInt(currentStep)},
   percent: ${Math.round(percent * 100) / 100} %,
   trainLoss: ${Math.round(trainLoss * 100) / 100}`;
-
 
   const progressData = [
     {
@@ -51,7 +51,7 @@ const MyPage = () => {
     },
     {
       title: "Train Loss",
-      value: Math.round(trainLoss * 100) / 100,
+      value: Math.round(100 * 100) / 100,
       text: `${Math.round(trainLoss * 100) / 100}`,
     },
   ];
@@ -75,7 +75,7 @@ const MyPage = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://10.130.1.3:8000/api/getCode", {
+      const response = await fetch(`http://10.130.0.142:8000/api/getCode`, {
         headers: {
           accept: "application/json",
         },
@@ -94,7 +94,7 @@ const MyPage = () => {
   const handleGoToSecondPage = async () => {
     try {
       const response = await fetch(
-        `http://10.130.1.3:8000/api/hyperparameters?optimizer=${encodeURIComponent(
+        `http://10.130.0.142:8000/api/hyperparameters?optimizer=${encodeURIComponent(
           optimizer
         )}&loss=${encodeURIComponent(
           lossFunction
@@ -122,7 +122,7 @@ const MyPage = () => {
   };
   const [ws, setWs] = useState(null);
   const establishWebSocketConnection = () => {
-    const socket = new WebSocket("ws://10.130.1.3:8000/ws");
+    const socket = new WebSocket(`ws://10.130.0.142:8000/ws`);
 
     socket.onopen = () => {
       console.log("WebSocket connected");
@@ -185,7 +185,6 @@ const MyPage = () => {
         Parameters
       </h1>
       <div className="inputs mb-5 rounded-2xl bg-white p-6 shadow-xl w-full flex gap-[3vw] flex-col">
-        
         <div className="fields flex flex-row">
           <div className="part1 w-1/2 flex flex-col gap-[3vw] px-5">
             <div className="flex flex-col gap-2">
@@ -285,12 +284,20 @@ const MyPage = () => {
       <h1 className="font-bold text-[1.7vw] capitalize text-[#5f5f5f] p-4">
         Progress
       </h1>
-      <ProgressGrid progressData={progressData} />;
+      <ProgressGrid progressData={progressData} />
 
-      
+      <h1 className="font-bold text-[1.7vw] capitalize text-[#5f5f5f] p-4 ">
+        Train-Loss
+      </h1>
+      <div className="shadow-xl rounded-2xl bg-white py-2 px-1 ">
+        
+      </div>
+
       <h1 className="font-bold text-[1.7vw] capitalize text-[#5f5f5f] p-4 ">
         Gen-Code
       </h1>
+
+     
       <div className="shadow-xl rounded-2xl bg-white py-2 px-1 ">
         {/* code gen part */}
         <SyntaxHighlighter
@@ -310,13 +317,12 @@ const MyPage = () => {
 
 export default MyPage;
 
-
-
-
-
-{/* <div className="grid grid-cols-1 xl:grid-cols-4 md:grid-cols-2 gap-6 w-full mb-5 ">
-        {/* 6 card div */}
-        {/* <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+{
+  /* <div className="grid grid-cols-1 xl:grid-cols-4 md:grid-cols-2 gap-6 w-full mb-5 ">
+        {/* 6 card div */
+}
+{
+  /* <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
           <h1 className="text-black font-bold text-xl">Total Epochs</h1>
           <CircularProgressbar
               className="w-4/6 h-4/6"
@@ -324,18 +330,20 @@ export default MyPage;
               text={`${Math.round(totalEpoch)}%`
             }
             />
-        </div> */}
-        
-        // <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
-        //   <h1 className="text-black font-bold text-xl">Current Epoch</h1>
-        //   <CircularProgressbar
-        //       className="w-4/6 h-4/6"
-        //       value={Math.round((currentEpoch / totalEpoch)* 100)}
-        //       text={`${Math.round(currentEpoch)}`
-        //     }
-        //     />
-        // </div>
-        {/* <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+        </div> */
+}
+
+// <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+//   <h1 className="text-black font-bold text-xl">Current Epoch</h1>
+//   <CircularProgressbar
+//       className="w-4/6 h-4/6"
+//       value={Math.round((currentEpoch / totalEpoch)* 100)}
+//       text={`${Math.round(currentEpoch)}`
+//     }
+//     />
+// </div>
+{
+  /* <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
           <h1 className="text-black font-bold text-xl">Steps Per Epochs</h1>
           <CircularProgressbar
               className="w-4/6 h-4/6"
@@ -343,34 +351,35 @@ export default MyPage;
               text={`${Math.round(stepsPerEpoch)}%`
             }
             />
-        </div> */}
-        // <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
-        //   <h1 className="text-black font-bold text-xl">Current Step</h1>
-        //   <CircularProgressbar
-        //       className="w-4/6 h-4/6"
-        //       value={Math.round((currentStep / stepsPerEpoch) * 100)}
-        //       text={`${Math.round(currentStep)}`
-        //     }
-        //     />
-        // </div>
-        // <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
-        //   <h1 className="text-black font-bold text-xl">Percent</h1>
-        //   <CircularProgressbar
-        //       className="w-4/6 h-4/6"
-        //       value={Math.round(percent)}
-        //       text={`${Math.round(percent)}%`
-        //     }
-        //     />
-        // </div>
-        // <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
-        //   <h1 className="text-black font-bold text-xl">Train loss</h1>
-        //   <CircularProgressbar
-        //       className="w-4/6 h-4/6"
-        //       value={Math.round(trainLoss * 100) / 100}
-              
-        //       text={`${Math.round(trainLoss * 100) / 100}`
-              
-        //     }
-        //     />
-        // </div>
-      // </div> */}
+        </div> */
+}
+// <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+//   <h1 className="text-black font-bold text-xl">Current Step</h1>
+//   <CircularProgressbar
+//       className="w-4/6 h-4/6"
+//       value={Math.round((currentStep / stepsPerEpoch) * 100)}
+//       text={`${Math.round(currentStep)}`
+//     }
+//     />
+// </div>
+// <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+//   <h1 className="text-black font-bold text-xl">Percent</h1>
+//   <CircularProgressbar
+//       className="w-4/6 h-4/6"
+//       value={Math.round(percent)}
+//       text={`${Math.round(percent)}%`
+//     }
+//     />
+// </div>
+// <div className="bg-white flex flex-col  item-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
+//   <h1 className="text-black font-bold text-xl">Train loss</h1>
+//   <CircularProgressbar
+//       className="w-4/6 h-4/6"
+//       value={Math.round(trainLoss * 100) / 100}
+
+//       text={`${Math.round(trainLoss * 100) / 100}`
+
+//     }
+//     />
+// </div>
+// </div> */}

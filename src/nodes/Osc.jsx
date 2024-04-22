@@ -68,7 +68,7 @@ export default function Osc({ id, data, nameField }) {
               return (
                   <select
                       className={tw(
-                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-pink-500"
                       )}
                       value={inputData[paramKey] || ""}
                       onChange={(e) => handleParamChange(paramKey, e.target.value)}
@@ -81,7 +81,7 @@ export default function Osc({ id, data, nameField }) {
               return (
                   <select
                       className={tw(
-                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-pink-500"
                       )}
                       value={inputData[paramKey] || ""}
                       onChange={(e) => handleParamChange(paramKey, e.target.value)}
@@ -97,7 +97,7 @@ export default function Osc({ id, data, nameField }) {
               return (
                   <input
                       className={tw(
-                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-pink-500"
                       )}
                       type="text"
                       value={inputData[paramKey] || ""}
@@ -149,7 +149,7 @@ export default function Osc({ id, data, nameField }) {
       <label className={tw("flex flex-col px-2 py-1")}>
         <p className={tw("text-xs font-bold mb-2 mt-2")}>Layer Type</p>
         <select
-          className="nodrag"
+          className="nodrag border-pink-500"
           value={selectedLayer}
           onChange={(e) => setSelectedLayer(e.target.value)}
         >

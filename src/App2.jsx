@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import ReactFlow, { ReactFlowProvider, Panel, Background } from "reactflow";
+import ReactFlow, {
+  ReactFlowProvider,
+  Panel,
+  Background,
+  BackgroundVariant,
+} from "reactflow";
 import { Link } from "react-router-dom";
 import { shallow } from "zustand/shallow";
 import { useStore } from "./store";
@@ -52,13 +57,16 @@ export default function App() {
   const { oscLayerType } = useStore();
   const { ampLayerType } = useStore();
 
-  // const apiUrl = "http://10.130.1.152:8000";
+  // const spacePressed = useKeyPress("Space");
+  // const cmdAndSPressed = useKeyPress(["Meta+s", "Strg+s"]);
+
+  const ip = "http://10.130.0.142:8000";
 
   let jsonData = {};
   const sendToApi = async () => {
     console.log(jsonData);
     try {
-      const response = fetch("http://10.130.1.3:8000/api/generate", {
+      const response = fetch(`http://10.130.0.142:8000/api/generate`, {
         method: "POST",
         headers: {
           accept: "application/json",
@@ -76,107 +84,6 @@ export default function App() {
     }
   };
 
-  // const handleLogClick = async () => {
-  //   const values = {
-  //     InputNode: [],
-  //     HiddenNode: [],
-  //   };
-  //   const relation = {
-  //     parentChildRelationship: [],
-  //   };
-  //   store.nodes
-  //     .filter((node) => node.type === "osc")
-  //     .forEach((node) => {
-  //       const InputNode = {
-  //         id: node.id,
-  //         args: { ...node.data }, // Initialize args object with existing data
-  //         type: oscLayerType,
-  //       };
-
-  //       layers.forEach((layer) => {
-  //         if (layer.Name === node.data.type) {
-  //           const params = layer.params;
-
-  //           // Check if params.args is an array before attempting to iterate over it
-  //           if (Array.isArray(params.args)) {
-  //             params.args.forEach((arg) => {
-  //               InputNode.args[arg] = ""; // Initialize with empty string
-  //             });
-  //           } else {
-  //             // console.log("params.args is not an array:", params.args);
-  //             // continue;
-  //           }
-  //         }
-  //       });
-
-  //       values.InputNode.push(InputNode);
-  //     });
-
-  //   // Amplifier Dat
-  //   store.nodes
-  //     .filter((node) => node.type === "amp")
-  //     .forEach((node) => {
-  //       const HiddenNode = {
-  //         id: node.id,
-  //         args: {},
-  //         type: ampLayerType,
-  //       };
-
-  //       // Assuming dynamic data is available in the 'data' object of each node
-  //       for (const [args, value] of Object.entries(node.data)) {
-  //         HiddenNode.args[args] = value;
-  //       }
-
-  //       values.HiddenNode.push(HiddenNode);
-  //     });
-
-  //   // Parent-Child Relationship
-  //   const parentChildMap = {};
-  //   store.edges.forEach((edge) => {
-  //     const { source, target } = edge;
-  //     if (!parentChildMap[source]) {
-  //       parentChildMap[source] = [];
-  //     }
-  //     parentChildMap[source].push(target);
-  //   });
-
-  //   store.nodes.forEach((node) => {
-  //     const children = parentChildMap[node.id] || [];
-  //     children.forEach((childId) => {
-  //       const parentName = node.id;
-  //       const childName = childId;
-  //       relation.parentChildRelationship.push({
-  //         parent: parentName,
-  //         child: childName,
-  //       });
-  //     });
-  //   });
-
-  //   // console.log(values);
-  //   // console.log(relation);
-  //   jsonData = { values, relation };
-  //   jsonData = JSON.stringify({ values, relation }, null, 2);
-
-  //   // Create a blob with the JSON data
-  //   const blob = new Blob([jsonData], { type: "application/json" });
-
-  //   // Create a URL for the blob
-  //   const url = URL.createObjectURL(blob);
-
-  //   // Create a temporary link element
-  //   const link = document.createElement("a");
-  //   link.href = url;
-  //   link.download = "log_data.json";
-
-  //   // Click the link to trigger the download
-  //   document.body.appendChild(link);
-  //   link.click();
-
-  //   // Clean up
-  //   URL.revokeObjectURL(url);
-  //   document.body.removeChild(link);
-  //   await sendToApi();
-  // };
 
   const handleLogClick = async () => {
     const values = {
@@ -262,46 +169,7 @@ export default function App() {
         values.HiddenNode.push(HiddenNode);
       });
 
-    // Amplifier Data
-    // store.nodes
-    //   .filter((node) => node.type === "amp")
-    //   .forEach((node) => {
-    //     const HiddenNode = {
-    //       id: node.id,
-    //       args: {},
-    //       type: ampLayerType,
-    //     };
 
-    //     layers.forEach((layer) => {
-    //       if (layer.Name === node.data.type) {
-    //         const params = layer.params;
-
-    //         // Check if params.args is an array before attempting to iterate over it
-    //         if (Array.isArray(params.args)) {
-    //           params.args.forEach((arg) => {
-    //             HiddenNode.args[arg] = ""; // Initialize with empty string
-    //           });
-    //         } else if (Object.keys(HiddenNode.args).length === 0) {
-    //           // If args is empty, fill it with "it is empty"
-    //           // const emptyfieldData = layers[parseInt(oscLayerType)].params.args ;
-    //           // const js = JSON.stringify(emptyfieldData);
-    //           const json1 = layers[parseInt(ampLayerType)].params.args;
-    //           const json2 = layers[parseInt(ampLayerType)].params.kwargs;
-
-    //           const concatenatedJSON = {
-    //             ...json1,
-    //             ...json2,
-    //           };
-    //           HiddenNode.args = concatenatedJSON;
-    //           console.log();
-    //         }
-    //       }
-    //     });
-
-    //   values.HiddenNode.push(HiddenNode);
-    // });
-
-    // Parent-Child Relationship
     const parentChildMap = {};
     store.edges.forEach((edge) => {
       const { source, target } = edge;
@@ -322,6 +190,7 @@ export default function App() {
         });
       });
     });
+
 
     // console.log(values);
     // console.log(relation);
@@ -410,8 +279,10 @@ export default function App() {
     }
   };
 
+  
+
   return (
-    <ReactFlowProvider className="h-screen w-screen flex flex-col bg-red-500">
+    <ReactFlowProvider className="h-screen w-screen flex flex-col ">
       {/* <div className=" bg-sky-100 " style={{ width: '100vw', height: '100vh' }}> */}
       <ReactFlow
         nodeTypes={nodeTypes}
@@ -424,6 +295,7 @@ export default function App() {
         onConnect={store.addEdge}
         fitView
         maxZoom={0.7}
+        className="bg-black -100"
       >
         <Panel
           className="flex space-x-4 items-center justify-center py-6 absolute"
@@ -447,10 +319,12 @@ export default function App() {
               onClick={handleLogClick}
             >
               Log Data
-            </button>
+            </button> 
           </Link>
         </Panel>
-        <Background />
+        {/* <MiniMap nodeStrokeWidth={2} nodeColor={nodeColor} /> */}
+
+        <Background gap={20} variant={BackgroundVariant.Dots} />
       </ReactFlow>
       {store.nodes.map((node) => (
         <div key={node.id}>{renderInputFields(node.type)}</div>
@@ -458,4 +332,5 @@ export default function App() {
       {/* </div> */}
     </ReactFlowProvider>
   );
+  
 }

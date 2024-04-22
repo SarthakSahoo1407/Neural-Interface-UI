@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import "./App.css";
 import "./index.css";
 import Select from "react-select";
+//dotenv;
 import { Background } from "reactflow";
+import { configDotenv } from "dotenv";
 
 function UploadPage() {
-  const ip = "http://10.130.1.248:8000";
-
+  const ip = "http://10.130.0.142:8000";
+  
   // const [file, setFile] = useState(null);
   // const [headers, setHeaders] = useState([]);
   // const [selectedFeatures, setSelectedFeatures] = useState([]);
@@ -109,7 +111,8 @@ function UploadPage() {
     formData.append("targets", selectedTargets.join(","));
     formData.append("file", file);
 
-    fetch("http://10.130.1.3:8000/api/file", {
+    console.log(`http://10.130.0.142:8000/api/file`)
+    fetch(`http://10.130.0.142:8000/api/file`, {
       method: "POST",
       body: formData,
     })
@@ -129,113 +132,30 @@ function UploadPage() {
         console.error("There was a problem with the API request:", error);
       });
   };
+  const customControlStyles = (base) => ({
+    
+});
 
-  // return (
-  //   <div className="flex ">
-  //     <div className="flex  items-center  justify-center h-screen w-screen">
-  //       <div className="text-center">
-  //         <h1 className="mb-8 text-4xl  font-bold  text-gray-800">
-  //           Upload Page
-  //         </h1>
-  // <input
-  //   type="file"
-  //   accept=".csv"
-  //   onChange={handleFileChange}
-  //   className="block mb-4 w-full text-sm text-slate-500
-  //   file:mr-4 file:py-2 file:px-4 file:rounded-md
-  //   file:border-0 file:text-sm file:font-semibold
-  //   file:bg-blue-50 file:text-blue-500
-  //   hover:file:bg-pink-100"
-  // />
-  //         <div className="flex flex-col w-[30vw] justify-between">
-  //           <div className="mr-8 flex flex-col justify-start items-start">
-  //             <div className="flex flex-row w-full gap-3">
-  // <h3 className="w-1/4 font-semibold  text-gray-900 dark:text-white">
-  //   Features
-  // </h3>
-  // <div className="w-2/4  ">
-  //   <Select
-  //     isMulti
-  //     options={headers.map((header) => ({
-  //       value: header,
-  //       label: header,
-  //     }))}
-  //     value={selectedFeatures.map((feature) => ({
-  //       value: feature,
-  //       label: feature,
-  //     }))}
-  //     onChange={(selectedOptions) => {
-  //       setSelectedFeatures(
-  //         selectedOptions.map((option) => option.value)
-  //       );
-  //     }}
-  //     className="w-full "
-  //   />
-  //               </div>
-  // <button
-  //   onClick={handleSelectAllFeatures}
-  //   className="w-1/4 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600"
-  // >
-  //   Select All
-  // </button>
-  //             </div>
-  //             <div className="flex flex-row w-full justify-between">
-  //               <h3 className="font-semibold w-1/4 text-gray-900 dark:text-white">
-  //                 Targets
-  //               </h3>
-  //               <Select
-  //                 isMulti
-  //                 options={headers.map((header) => ({
-  //                   value: header,
-  //                   label: header,
-  //                 }))}
-  //                 value={selectedTargets.map((target) => ({
-  //                   value: target,
-  //                   label: target,
-  //                 }))}
-  //                 onChange={(selectedOptions) => {
-  //                   setSelectedTargets(
-  //                     selectedOptions.map((option) => option.value)
-  //                   );
-  //                 }}
-  //                 className="w-3/4 px-"
-  //               />
-  //             </div>
-  //           </div>
-  //         </div>
-
-  //         <Link to="/app" className="text-white">
-  //           <button
-  //             className="px-6 py-3 text-lg font-semibold self-center ml-6 text-white bg-blue-500 rounded hover:bg-blue-600"
-  //             onClick={handleGoToSecondPage}
-  //           >
-  //             HyperParameters
-  //           </button>
-  //         </Link>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
 
   return (
     <div className="w-screen h-screen flex justify-center items-center"  >
     <div className="nav w-full px-6 py-2 items-center flex flex-row justify-between absolute top-0 z-20" >
       <div className="log flex flex-row gap-3 w-[18%] p-4  justify-center items-center">
-        <img className="w-[2.8vw]" src="public/final.png" alt="" />
+        <img className="w-[2.8vw]" src="/final.png" alt="" />
         <h1 className="font-bold text-[1.7vw] capitalize text-[#414141]">
           Neural-map
         </h1>
       </div>
       <div className="items capitalize font-semibold w-1/2 text-white text-[1.2vw] flex flex-row gap-4 z-10 justify-end">
-        <h4 className="cursor-pointer px-3 py-2 rounded-md w-[18%] flex justify-center items-center bg-[#9333ea] hover:bg-[#9856d6]">
+        {/* <h4 className="cursor-pointer px-3 py-2 rounded-md w-[18%] flex justify-center items-center bg-[#9333ea] hover:bg-[#9856d6]">
           About us
-        </h4>
-        <h4 className="cursor-pointer px-3 py-2 rounded-md w-[18%] flex justify-center items-center bg-[#2563eb] hover:bg-[#5c75cc]">
+        </h4> */}
+        {/* <h4 className="cursor-pointer px-3 py-2 rounded-md w-[18%] flex justify-center items-center bg-[#2563eb] hover:bg-[#5c75cc]">
           Contact us
-        </h4>
+        </h4> */}
       </div>
     </div>
-    <div className="w-[35vw] h-[65vh] shadow-2xl px-[0.7vw] py-[2.4vw] bg-white rounded-md flex flex-col items-center justify-between">
+    <div className="w-[50vw] h-[65vh] shadow-2xl px-[0.7vw] py-[2.4vw] bg-white rounded-md flex flex-col items-center justify-between">
       {/* main div */}
       <div className="text-[#414141] text-[0.9vw] font-bold capitalize">
         {/* title div */}
@@ -262,6 +182,7 @@ function UploadPage() {
           {/* feature drop down div */}
           <Select
             isMulti
+            // styles={{control: customControlStyles}}
             options={headers.map((header) => ({
               value: header,
               label: header,
