@@ -60,13 +60,13 @@ export default function App() {
   // const spacePressed = useKeyPress("Space");
   // const cmdAndSPressed = useKeyPress(["Meta+s", "Strg+s"]);
 
-  const ip = "http://10.130.0.142:8000";
+  const ip = "http://10.130.2.83:8000";
 
   let jsonData = {};
   const sendToApi = async () => {
     console.log(jsonData);
     try {
-      const response = fetch(`http://10.130.0.142:8000/api/generate`, {
+      const response = fetch(`http://10.130.2.83:8000/api/generate`, {
         method: "POST",
         headers: {
           accept: "application/json",
@@ -198,24 +198,41 @@ export default function App() {
     jsonData = JSON.stringify({ values, relation }, null, 2);
 
     console.log(jsonData);
-    // Create a blob with the JSON data
-    const blob = new Blob([jsonData], { type: "application/json" });
+    const layerInfo = {
+      layerData: jsonData,
+    };
+  
 
-    // Create a URL for the blob
-    const url = URL.createObjectURL(blob);
+    const layerInfoJSON = JSON.stringify(layerInfo, null, 2);
 
-    // Create a temporary link element
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "log_data.json";
+  // Retrieve existing dataset information from localStorage
+  const existingDatasetInfo = localStorage.getItem("dataset_info.txt");
 
-    // Click the link to trigger the download
-    document.body.appendChild(link);
-    link.click();
+  // Combine existing dataset info and layer info
+  const combinedInfo = `${existingDatasetInfo}\n\nLayer info:\n${layerInfoJSON}`;
 
-    // Clean up
-    URL.revokeObjectURL(url);
-    document.body.removeChild(link);
+  // Save the combined info to localStorage under the same key
+  localStorage.setItem("dataset_info.txt", combinedInfo);
+
+
+    // // Create a blob with the JSON data
+    // const blob = new Blob([jsonData], { type: "application/json" });
+
+    // // Create a URL for the blob
+    // const url = URL.createObjectURL(blob);
+
+    // // Create a temporary link element
+    // const link = document.createElement("a");
+    // link.href = url;
+    // link.download = "log_data.json";
+
+    // // Click the link to trigger the download
+    // document.body.appendChild(link);
+    // link.click();
+
+    // // Clean up
+    // URL.revokeObjectURL(url);
+    // document.body.removeChild(link);
     await sendToApi();
   };
 

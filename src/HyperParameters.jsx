@@ -6,6 +6,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import ChangingProgressProvider from "./ChangingProgressProvider";
 import ProgressGrid from "./ProgressCard";
 
+
 import "react-circular-progressbar/dist/styles.css";
 
 const MyPage = () => {
@@ -24,6 +25,10 @@ const MyPage = () => {
   const [stepsPerEpoch, setStepsPerEpoch] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const [percent, setPercent] = useState(0);
+  const [isWebSocketConnected, setIsWebSocketConnected] = useState(false); // State to track WebSocket connection status
+  const [isSubmitting, setIsSubmitting] = useState(false); // State to track whether form is submitting
+
+
   const [trainLoss, setTrainLoss] = useState(0);
 
   webMessage = `  totalEpoch: ${parseInt(totalEpoch)},
@@ -61,7 +66,7 @@ const MyPage = () => {
     "Binary Crossentropy": "BinaryCrossentropy",
     "Sparse Categorical Crossentropy": "SparseCategoricalCrossentropy",
     "Categorical Crossentropy": "CategoricalCrossentropy",
-    Huber: "Huber",
+    "Huber": "Huber",
     "Mean Absolute Error": "MeanAbsoluteError",
     "Mean Sqaured Error": "MeanSquaredError",
   };
@@ -75,7 +80,7 @@ const MyPage = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://10.130.0.142:8000/api/getCode`, {
+      const response = await fetch(`http://10.130.2.83:8000/api/getCode`, {
         headers: {
           accept: "application/json",
         },
@@ -94,7 +99,7 @@ const MyPage = () => {
   const handleGoToSecondPage = async () => {
     try {
       const response = await fetch(
-        `http://10.130.0.142:8000/api/hyperparameters?optimizer=${encodeURIComponent(
+        `http://10.130.2.83:8000/api/hyperparameters?optimizer=${encodeURIComponent(
           optimizer
         )}&loss=${encodeURIComponent(
           lossFunction
@@ -115,17 +120,33 @@ const MyPage = () => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+      
       await establishWebSocketConnection();
+      const currentTime = new Date().toLocaleString();
+      const newData = `\n\nTrain Loss: ${trainLoss}\nCurrent Time: ${currentTime}`;
+      const existingData = localStorage.getItem("dataset_info.txt");
+
+      const combinedData = `${existingData}${newData}`;
+
+      localStorage.setItem("datasetinfo.txt", combinedData);
+
+      
+
     } catch (error) {
       console.error("Error sending hyperparameters:", error);
+    }
+    finally{
+      setIsSubmitting(false); // Stop submitting
     }
   };
   const [ws, setWs] = useState(null);
   const establishWebSocketConnection = () => {
-    const socket = new WebSocket(`ws://10.130.0.142:8000/ws`);
+    const socket = new WebSocket(`ws://10.130.2.83:8000/ws`);
 
     socket.onopen = () => {
       console.log("WebSocket connected");
+      setIsWebSocketConnected(true); // Set WebSocket connection status to true when connected
+
     };
 
     socket.onmessage = (event) => {
@@ -143,6 +164,9 @@ const MyPage = () => {
 
     socket.onclose = () => {
       console.log("WebSocket disconnected");
+      setIsWebSocketConnected(false); // Set WebSocket connection status to false when disconnected
+
+      
     };
 
     setWs(socket);
@@ -274,6 +298,7 @@ const MyPage = () => {
           </div>
         </div>
         <button
+          disabled={isWebSocketConnected || isSubmitting} // Disable button if WebSocket is connected or form is submitting
           className="px-4 py-2 w-1/4 text-[1.2vw] self-center font-semibold text-white bg-[#16a34a] rounded-lg hover:bg-[#41a967]"
           onClick={handleGoToSecondPage}
         >
@@ -286,15 +311,15 @@ const MyPage = () => {
       </h1>
       <ProgressGrid progressData={progressData} />
 
-      <h1 className="font-bold text-[1.7vw] capitalize text-[#5f5f5f] p-4 ">
+      {/* <h1 className="font-bold text-[1.7vw] capitalize text-[#5f5f5f] p-4 ">
         Train-Loss
       </h1>
       <div className="shadow-xl rounded-2xl bg-white py-2 px-1 ">
         
-      </div>
+      </div> */}
 
       <h1 className="font-bold text-[1.7vw] capitalize text-[#5f5f5f] p-4 ">
-        Gen-Code
+        Generated-Code
       </h1>
 
      
