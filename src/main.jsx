@@ -10,6 +10,5 @@ import "./index.css";
 const root = document.querySelector("#root");
 
 ReactDOM.createRoot(root).render(
-
-   <App/>
+    <App/>
 );
