@@ -10,11 +10,6 @@ import "./index.css";
 const root = document.querySelector("#root");
 
 ReactDOM.createRoot(root).render(
-  <React.StrictMode>
-    {/* React flow needs to be inside an element with a known height and width to work */}
-      <ReactFlowProvider>
-        <App />
-      </ReactFlowProvider>
-  </React.StrictMode>
-  // <App/>
+
+   <App/>
 );
