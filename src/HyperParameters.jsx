@@ -61,6 +61,16 @@ const MyPage = () => {
     },
   ];
 
+  const downloadCode = () => {
+    const element = document.createElement("a");
+    const file = new Blob([codeString], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = "gen-code.py";
+    document.body.appendChild(element); // Required for this to work in Firefox
+    element.click();
+  };
+
+
   // console.log(typeof(currentEpoch))
   const lossFunc = {
     "Binary Crossentropy": "BinaryCrossentropy",
@@ -336,6 +346,12 @@ const MyPage = () => {
           {codeString}
         </SyntaxHighlighter>
       </div>
+      <button
+          className="px-4 py-2 mt-4 text-[1.2vw] font-semibold text-white bg-[#16a34a] rounded-lg hover:bg-[#41a967]"
+          onClick={downloadCode}
+        >
+          Download Code
+        </button>
     </div>
   );
 };
