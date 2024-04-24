@@ -5,7 +5,7 @@ import "react-circular-progressbar/dist/styles.css";
 const ProgressCard = ({ title, value, text }) => {
   return (
     <div className="bg-white flex flex-col items-center px-8 py-4 gap-7 shadow-xl w-full h-[30vh] rounded-2xl p-2">
-      <h1 className="text-[#5f5f5f] font-bold text-xl">{title}</h1>
+      <h1 className="text-[#5f5f5f] font-bold text-md">{title}</h1>
       <CircularProgressbar 
         className="w-4/6 h-4/6" 
         value={value} 
@@ -23,7 +23,7 @@ const ProgressCard = ({ title, value, text }) => {
 
 const ProgressGrid = ({ progressData }) => {
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-4 md:grid-cols-2 gap-6 w-full mb-5">
+    <div className="grid grid-cols-1 xl:grid-cols-5 md:grid-cols-2 gap-6 w-full mb-5">
       {progressData.map((item, index) => (
         <ProgressCard
           key={index}

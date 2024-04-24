@@ -119,7 +119,7 @@ function UploadPage() {
     formData.append("file", file);
 
     console.log(`http://10.130.2.83:8000/api/file`);
-    fetch(`http://10.130.2.83:8000/api/file`, {
+    fetch(`http://192.168.83.208:8000/api/file`, {
       method: "POST",
       body: formData,
     })

@@ -66,7 +66,7 @@ export default function App() {
   const sendToApi = async () => {
     console.log(jsonData);
     try {
-      const response = fetch(`http://10.130.2.83:8000/api/generate`, {
+      const response = fetch(`http://192.168.83.208:8000/api/generate`, {
         method: "POST",
         headers: {
           accept: "application/json",
@@ -312,7 +312,7 @@ export default function App() {
         onConnect={store.addEdge}
         fitView
         maxZoom={0.7}
-        className="bg-black -100"
+        // className="bg-black -100"
       >
         <Panel
           className="flex space-x-4 items-center justify-center py-6 absolute"

@@ -25,6 +25,7 @@ const MyPage = () => {
   const [stepsPerEpoch, setStepsPerEpoch] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const [percent, setPercent] = useState(0);
+  const [val_loss, setValLoss] = useState(0);
   const [isWebSocketConnected, setIsWebSocketConnected] = useState(false); // State to track WebSocket connection status
   const [isSubmitting, setIsSubmitting] = useState(false); // State to track whether form is submitting
 
@@ -59,6 +60,11 @@ const MyPage = () => {
       value: Math.round(100 * 100) / 100,
       text: `${Math.round(trainLoss * 100) / 100}`,
     },
+    {
+      title: "Valid Loss",
+      value: Math.round(100 * 100) / 100,
+      text: `${Math.round(val_loss * 100) / 100}`,
+    },
   ];
 
   const downloadCode = () => {
@@ -68,6 +74,41 @@ const MyPage = () => {
     element.download = "gen-code.py";
     document.body.appendChild(element); // Required for this to work in Firefox
     element.click();
+  };
+
+  const downloadModel = async () => {
+    try {
+      const response = await fetch('http://192.168.83.208:8000/api/model', {
+        headers: {
+          'accept': 'application/json'
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to download model');
+      }
+  
+      // Convert response to blob
+      const blob = await response.blob();
+  
+      // Create a temporary URL for the blob
+      const url = window.URL.createObjectURL(blob);
+  
+      // Create a temporary link element
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'model.zip'); // Set the filename for the downloaded file
+      document.body.appendChild(link);
+  
+      // Trigger the download
+      link.click();
+  
+      // Clean up
+      URL.revokeObjectURL(url);
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error downloading model:', error);
+    }
   };
 
 
@@ -90,7 +131,7 @@ const MyPage = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://10.130.2.83:8000/api/getCode`, {
+      const response = await fetch(`http://192.168.83.208:8000/api/getCode`, {
         headers: {
           accept: "application/json",
         },
@@ -109,7 +150,7 @@ const MyPage = () => {
   const handleGoToSecondPage = async () => {
     try {
       const response = await fetch(
-        `http://10.130.2.83:8000/api/hyperparameters?optimizer=${encodeURIComponent(
+        `http://192.168.83.208:8000/api/hyperparameters?optimizer=${encodeURIComponent(
           optimizer
         )}&loss=${encodeURIComponent(
           lossFunction
@@ -147,11 +188,12 @@ const MyPage = () => {
     }
     finally{
       setIsSubmitting(false); // Stop submitting
+      console
     }
   };
   const [ws, setWs] = useState(null);
   const establishWebSocketConnection = () => {
-    const socket = new WebSocket(`ws://10.130.2.83:8000/ws`);
+    const socket = new WebSocket(`ws://192.168.83.208:8000/ws`);
 
     socket.onopen = () => {
       console.log("WebSocket connected");
@@ -168,6 +210,7 @@ const MyPage = () => {
       setCurrentStep(parsedData.current_step);
       setPercent(parsedData.percent);
       setTrainLoss(parsedData.train_loss);
+      setValLoss(parsedData.val_loss);
 
       setWebMessage(event.data);
     };
@@ -351,6 +394,16 @@ const MyPage = () => {
           onClick={downloadCode}
         >
           Download Code
+        </button>
+        <hr className="p-2 mt-10"></hr>
+        <h1 className="font-bold text-[1.7vw] capitalize text-[#5f5f5f] p-4 ">
+        Model
+      </h1>
+        <button
+          className="px-4 py-2 mt-4 text-[1.2vw] font-semibold text-white bg-[#16a34a] rounded-lg hover:bg-[#41a967]"
+          onClick={downloadModel}
+        >
+          Download Model
         </button>
     </div>
   );
