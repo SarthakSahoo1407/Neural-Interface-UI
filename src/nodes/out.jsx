@@ -29,7 +29,7 @@ export default function Out({ id, data }) {
       <Handle className={tw('w-2 h-2')} type="target" position="top" />
 
 
-      <p>Output Node</p>
+      <p className='bg-white text-black'>Output Node</p>
     </div>
   );
 }

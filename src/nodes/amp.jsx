@@ -400,7 +400,7 @@ export default function Amp({ id, data, nameField }) {
               return (
                   <select
                       className={tw(
-                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+                          "w-full px-2 py-1 rounded border border-gray-300  text-black bg-white focus:outline-none focus:border-blue-300"
                       )}
                       value={inputData[paramKey] || ""}
                       onChange={(e) => handleParamChange(paramKey, e.target.value)}
@@ -413,7 +413,7 @@ export default function Amp({ id, data, nameField }) {
               return (
                   <select
                       className={tw(
-                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-300 bg-white text-black"
                       )}
                       value={inputData[paramKey] || ""}
                       onChange={(e) => handleParamChange(paramKey, e.target.value)}
@@ -429,7 +429,7 @@ export default function Amp({ id, data, nameField }) {
               return (
                   <input
                       className={tw(
-                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-300 text-black bg-white"
                       )}
                       type="text"
                       value={inputData[paramKey] || ""}
@@ -453,7 +453,7 @@ export default function Amp({ id, data, nameField }) {
       if (paramKey === "Type") continue;
       const inputField = (
           <div key={paramKey} className={tw("mb-2 w-full")}>
-              <label className={tw("block text-sm font-bold mb-1")}>{paramKey}</label>
+              <label className={tw("block text-sm font-bold text-black mb-1")}>{paramKey}</label>
               {renderInputField(paramKey, paramDesc)}
           </div>
       );
@@ -463,7 +463,7 @@ export default function Amp({ id, data, nameField }) {
   const [firstColumn, secondColumn, thirdColumn] = splitIntoThreeColumns(inputFields);
 
   return (
-    <div className={tw('grid grid-cols-3 gap-4')}>
+    <div className={tw('grid grid-cols-2 gap-4 px-4')}>
       <div>{firstColumn}</div>
       <div>{secondColumn}</div>
       <div>{thirdColumn}</div>
@@ -474,14 +474,16 @@ export default function Amp({ id, data, nameField }) {
   return (
     <div className={tw("rounded-md bg-white shadow-xl")}>
       <p
-        className={tw("rounded-t-md px-2 py-2 bg-blue-500 text-white text-xl ")}
+        className={tw("rounded-t-md px-2 py-2 bg-blue-300 text-white text-xl ")}
       >
         Hidden Node
       </p>
-      <label className={tw("flex flex-col px-2 py-1")}>
+      <label className={tw("flex flex-col text-black px-2 py-1")}>
+    
         <p className={tw("text-xs font-bold mb-2 mt-2")}>Layer Type</p>
+        <hr className="p-2"/>
         <select
-          className="nodrag"
+          className="nodrag bg-white text-black border-[0.3px] p-1 border-blue-200 focus:outline-none"
           value={selectedLayer}
           onChange={(e) => setSelectedLayer(e.target.value)}
         >

@@ -68,7 +68,7 @@ export default function Osc({ id, data, nameField }) {
               return (
                   <select
                       className={tw(
-                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-pink-500"
+                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-pink-300 bg-white text-black"
                       )}
                       value={inputData[paramKey] || ""}
                       onChange={(e) => handleParamChange(paramKey, e.target.value)}
@@ -81,7 +81,7 @@ export default function Osc({ id, data, nameField }) {
               return (
                   <select
                       className={tw(
-                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-pink-500"
+                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-pink-500 bg-white text-black"
                       )}
                       value={inputData[paramKey] || ""}
                       onChange={(e) => handleParamChange(paramKey, e.target.value)}
@@ -97,7 +97,7 @@ export default function Osc({ id, data, nameField }) {
               return (
                   <input
                       className={tw(
-                          "w-full px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-pink-500"
+                          "w-full px-2 py-1 rounded border border-gray-300 text-black bg-white focus:outline-none focus:border-pink-300"
                       )}
                       type="text"
                       value={inputData[paramKey] || ""}
@@ -121,7 +121,7 @@ export default function Osc({ id, data, nameField }) {
       if (paramKey === "Type") continue;
       const inputField = (
           <div key={paramKey} className={tw("mb-2 w-full")}>
-              <label className={tw("block text-sm font-bold mb-1")}>{paramKey}</label>
+              <label className={tw("block text-sm font-bold text-black mb-1")}>{paramKey}</label>
               {renderInputField(paramKey, paramDesc)}
           </div>
       );
@@ -131,7 +131,7 @@ export default function Osc({ id, data, nameField }) {
   const [firstColumn, secondColumn, thirdColumn] = splitIntoThreeColumns(inputFields);
 
   return (
-    <div className={tw('grid grid-cols-3 gap-4')}>
+    <div className={tw('grid grid-cols-2 px-4 gap-4')}>
       <div>{firstColumn}</div>
       <div>{secondColumn}</div>
       <div>{thirdColumn}</div>
@@ -146,10 +146,10 @@ export default function Osc({ id, data, nameField }) {
       >
         Input Node
       </p>
-      <label className={tw("flex flex-col px-2 py-1")}>
+      <label className={tw("flex flex-col text-black px-2 py-1")}>
         <p className={tw("text-xs font-bold mb-2 mt-2")}>Layer Type</p>
         <select
-          className="nodrag border-pink-500"
+          className="nodrag border-pink-300 p-1 rounder-sm border-[0.3px] bg-white text-black"
           value={selectedLayer}
           onChange={(e) => setSelectedLayer(e.target.value)}
         >
