@@ -11,7 +11,7 @@ import MyPage from "./HyperParameters";
 
 function App() {
   return (
-    <Router  >
+    <Router  basename="/">
       <Routes>
         {" "}
         <Route path="/" element={<UploadPage />} />{" "}
