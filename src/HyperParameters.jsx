@@ -77,8 +77,14 @@ const MyPage = () => {
   };
 
   const downloadModel = async () => {
+    // try {
+    //   const response = await fetch('http://192.168.83.208:8000/api/model', {
+    //     headers: {
+    //       'accept': 'application/json'
+    //     }
+    //   });
     try {
-      const response = await fetch('http://192.168.83.208:8000/api/model', {
+      const response = await fetch('/api/model', {
         headers: {
           'accept': 'application/json'
         }
@@ -130,8 +136,14 @@ const MyPage = () => {
   };
 
   const fetchData = async () => {
+    // try {
+    //   const response = await fetch(`http://192.168.83.208:8000/api/getCode`, {
+    //     headers: {
+    //       accept: "application/json",
+    //     },
+    //   });
     try {
-      const response = await fetch(`http://192.168.83.208:8000/api/getCode`, {
+      const response = await fetch(`/api/getCode`, {
         headers: {
           accept: "application/json",
         },
@@ -149,8 +161,27 @@ const MyPage = () => {
 
   const handleGoToSecondPage = async () => {
     try {
+      // const response = await fetch(
+      //   `http://192.168.83.208:8000/api/hyperparameters?optimizer=${encodeURIComponent(
+      //     optimizer
+      //   )}&loss=${encodeURIComponent(
+      //     lossFunction
+      //   )}&learning_rate=${encodeURIComponent(
+      //     learningRate
+      //   )}&epochs=${encodeURIComponent(epochs)}&batch_size=${encodeURIComponent(
+      //     batchSize
+      //   )}&validation_split=${encodeURIComponent(validation_split)}`,
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       accept: "application/json",
+      //       "content-type": "application/x-www-form-urlencoded",
+      //     },
+      //     body: "",
+      //   }
+      // );
       const response = await fetch(
-        `http://192.168.83.208:8000/api/hyperparameters?optimizer=${encodeURIComponent(
+        `/api/hyperparameters?optimizer=${encodeURIComponent(
           optimizer
         )}&loss=${encodeURIComponent(
           lossFunction
@@ -193,7 +224,8 @@ const MyPage = () => {
   };
   const [ws, setWs] = useState(null);
   const establishWebSocketConnection = () => {
-    const socket = new WebSocket(`ws://192.168.83.208:8000/ws`);
+    // const socket = new WebSocket(`ws://192.168.83.208:8000/ws`);
+    const socket = new WebSocket(`ws://192.168.83.208:8000/ws`); //change this only - websocket
 
     socket.onopen = () => {
       console.log("WebSocket connected");

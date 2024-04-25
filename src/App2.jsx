@@ -60,13 +60,20 @@ export default function App() {
   // const spacePressed = useKeyPress("Space");
   // const cmdAndSPressed = useKeyPress(["Meta+s", "Strg+s"]);
 
-  const ip = "http://10.130.2.83:8000";
 
   let jsonData = {};
   const sendToApi = async () => {
     console.log(jsonData);
     try {
-      const response = fetch(`http://192.168.83.208:8000/api/generate`, {
+      // const response = fetch(`http://192.168.83.208:8000/api/generate`, {
+      //   method: "POST",
+      //   headers: {
+      //     accept: "application/json",
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: jsonData,
+      // });
+      const response = fetch(`/api/generate`, {
         method: "POST",
         headers: {
           accept: "application/json",
