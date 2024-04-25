@@ -203,7 +203,7 @@ function UploadPage() {
                   selectedOptions.map((option) => option.value)
                 );
               }}
-              className="w-3/4 "
+              className="w-3/4 text-[#5f5f5f] "
             />
             {/* select all button div */}
             <button
@@ -237,7 +237,7 @@ function UploadPage() {
                   selectedOptions.map((option) => option.value)
                 );
               }}
-              className="w-full border-none active:outline-none "
+              className="w-full border-none active:outline-none text-[#5f5f5f] "
             />
           </div>
         </div>

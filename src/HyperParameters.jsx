@@ -225,7 +225,7 @@ const MyPage = () => {
   const [ws, setWs] = useState(null);
   const establishWebSocketConnection = () => {
     // const socket = new WebSocket(`ws://192.168.83.208:8000/ws`);
-    const socket = new WebSocket(`ws://192.168.83.208:8000/ws`); //change this only - websocket
+    const socket = new WebSocket(`ws://172.17.16.1:8000/ws`); //change this only - websocket
 
     socket.onopen = () => {
       console.log("WebSocket connected");
